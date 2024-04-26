@@ -1,6 +1,12 @@
 import { useState } from 'react';
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
 
 const RegistrationForm = () => {
+  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
+  const [errStatus, setErrorStatus] = useState(false);
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -15,8 +21,34 @@ const RegistrationForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log(formData);
+    setErrorStatus(false);
+    setMessage("");
+
+    if(formData.password === formData.confirmPassword) {
+
+      const userData = {
+        UName : formData.username,
+        UEmail : formData.email,
+        UPassword : formData.password,
+        UImage: "default.png",
+      }
+
+      axios
+      .post("http://127.0.0.1:7575/signup", userData)
+      .then((response) => {
+        setMessage(response.data.message);
+        localStorage.setItem("UserData" , JSON.stringify(response.data.newUserData))
+        navigate("/emailVarification");
+      })
+      .catch((error) => {
+        setMessage(error.response.data.message);
+        setErrorStatus(true)
+      });
+    }
+    else {
+      setMessage("Password and Confirm Password must be same")
+      setErrorStatus(true);
+    }
   };
 
   return (
@@ -41,6 +73,7 @@ const RegistrationForm = () => {
                 onChange={handleChange}
               />
             </div>
+            <br />
             <div>
               <label htmlFor="email" className="sr-only">Email address</label>
               <input
@@ -55,6 +88,7 @@ const RegistrationForm = () => {
                 onChange={handleChange}
               />
             </div>
+            <br />
             <div>
               <label htmlFor="password" className="sr-only">Password</label>
               <input
@@ -69,6 +103,7 @@ const RegistrationForm = () => {
                 onChange={handleChange}
               />
             </div>
+            <br />
             <div>
               <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
               <input
@@ -92,6 +127,10 @@ const RegistrationForm = () => {
             >
               Register
             </button>
+          </div>
+
+          <div className={errStatus ? "text-red-600" : "text-green-600"}>
+            {message}
           </div>
         </form>
       </div>

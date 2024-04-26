@@ -1,15 +1,13 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 const Card = ({ product, handleClick }) => {
-  const { title, description, banner, price } = product;
+  const { title, banner, price } = product;
 
   return (
   
     <div className="container mx-auto px-4" style={{display:"inline-flex"}}>
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      
-    
+
       <div className="max-w-sm rounded overflow-hidden shadow-lg cursor-pointer">
         <img src={banner} alt={title} className="w-full" />
         <div className="px-6 py-4">

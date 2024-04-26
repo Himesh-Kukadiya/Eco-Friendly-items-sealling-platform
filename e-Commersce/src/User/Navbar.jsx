@@ -10,7 +10,9 @@ const Navbar = ({size,setshow}) => {
       <div className="container mx-auto px-4">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <span className="text-white font-bold">Logo</span>
+            <span className="text-white font-bold">  
+              <span style={{color: "black"}}>{"Eco"}</span><span style={{color: "red"}}>{"S's"}</span>
+            </span>
           </div>
           <div className="hidden md:block mt-3">
             <div className="ml-auto flex items-center space-x-4"> {/* Added ml-auto to push the items to the right */}
@@ -25,7 +27,7 @@ const Navbar = ({size,setshow}) => {
                     <circle cx="20" cy="21" r="1"></circle>
                     <path d="M1 1h4l2.68 12.57a2 2 0 0 0 1.95 1.43h9.74a2 2 0 0 0 1.95-1.43L23 6H6" stroke="currentColor" strokeWidth="2"></path>
                   </svg>
-                  <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full text-white px-2 py-1 text-xs">{size}</span>
+                  {size > 0 ? <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full text-white px-2 py-1 text-xs">{size}</span> : null}
                 </div>
               </Link>
             </div>

@@ -29,14 +29,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-auto max-w-7xl">
             <div className="bg-gray-200 mb-5 rounded-xl p-8">
                 <span className="inline-flex">
-                <img src="src/assets/Images/but.svg" className="w-20 mb-4" alt="icon" />
+                <img src="/src/assets/Images/but.svg" className="w-20 mb-4" alt="icon" />
                 <p className="text-left ml-5"><b>Plastic-free</b><br /> Our products and packaging are made using</p>
                 </span>
             </div>
 
             <div className="bg-gray-200 mb-5 rounded-xl p-8">
                 <span className="inline-flex">
-                    <img src="src/assets/Images/netur.svg" className="w-20 mb-4" alt="icon" />
+                    <img src="/src/assets/Images/netur.svg" className="w-20 mb-4" alt="icon" />
                     <p className="text-left ml-5"><b>Locally sourced</b><br /> All our products are sourced from locations closest</p>
                 </span>
             </div>
@@ -45,14 +45,14 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-auto max-w-7xl">
             <div className="bg-gray-200 mb-5 rounded-xl p-8">
                 <span className="inline-flex">
-                    <img src="src/assets/Images/rapit.svg" className="w-20 mb-4" alt="icon" />
+                    <img src="/src/assets/Images/rapit.svg" className="w-20 mb-4" alt="icon" />
                     <p className="text-left ml-5"><b>Cruelty-free</b><br /> None of our products are tested on animals</p>
                 </span>
             </div>
 
             <div className="bg-gray-200 mb-5 rounded-xl p-8">
                 <span className="inline-flex">
-                    <img src="src/assets/Images/Camical.svg" className="w-20 mb-4" alt="icon" />
+                    <img src="/src/assets/Images/Camical.svg" className="w-20 mb-4" alt="icon" />
                     <p className="text-left ml-5"><b>Chemical-free</b><br /> All our products are made from natural ingredients</p>
                 </span>
             </div>
@@ -88,9 +88,9 @@ export default function Footer() {
             <p className="text-left">Earth Haven | About Us | Contact Us | FAQs | Blog | Privacy Policy | Terms & Conditions</p>
 
             <div className="text-left">
-                <img src="src/assets/Images/Facebook.svg" className="inline-block mx-2" alt="Facebook" />
-                <img src="src/assets/Images/Insta.svg" className="inline-block mx-2" alt="Instagram" />
-                <img src="src/assets/Images/LinkDin.svg" className="inline-block mx-2" alt="LinkedIn" />
+                <img src="/src/assets/Images/Facebook.svg" className="inline-block mx-2" alt="Facebook" />
+                <img src="/src/assets/Images/Insta.svg" className="inline-block mx-2" alt="Instagram" />
+                <img src="/src/assets/Images/LinkDin.svg" className="inline-block mx-2" alt="LinkedIn" />
             </div>
             <br />
          </div>

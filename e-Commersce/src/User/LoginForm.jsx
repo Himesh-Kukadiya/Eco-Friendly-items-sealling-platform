@@ -1,6 +1,11 @@
 import { useState } from 'react';
+import axios from 'axios';
+import {useNavigate} from 'react-router-dom';
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
+  const [errStatus, setErrorStatus] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -13,7 +18,23 @@ const LoginForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
+    setErrorStatus(false);
+    setMessage("");
+
+    const userData = {"email" : formData.email, "password" : formData.password};
+    axios
+      .post("http://127.0.0.1:7575/login", userData)
+      .then((response) => {
+        setMessage(response.data.message);
+        localStorage.setItem("UserData" , JSON.stringify(response.data.user))
+        setInterval(() => {
+          navigate("/");
+        }, 500);
+      })
+      .catch((error) => {
+        setMessage(error.response.data.message);
+        setErrorStatus(true)
+      });
     console.log(formData);
   };
 
@@ -39,6 +60,7 @@ const LoginForm = () => {
                 onChange={handleChange}
               />
             </div>
+            <br />
             <div>
               <label htmlFor="password" className="sr-only">Password</label>
               <input
@@ -60,8 +82,12 @@ const LoginForm = () => {
               type="submit"
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              Sign in
+              LOGIN
             </button>
+          </div>
+
+          <div className={errStatus ? "text-red-600" : "text-green-600"}>
+            {message}
           </div>
         </form>
       </div>

@@ -1,76 +1,123 @@
-  import './App.css'
-  import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-  import Productlist from './User/Productlist';
-  import Home from './User/Home'
+import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Productlist from './User/Productlist';
+import Home from './User/Home'
+import Footer from './User/Footer';
+import AboutPage from './User/AboutPage';
+import SellerRegistrationForm from './User/SellerRegistrationForm';
+import Navbar from './User/Navbar';
+import { useEffect, useState } from 'react';
+import AddressPage from './User/AddressPage';
+import Cart from './User/Cart';
+import LoginForm from './User/LoginForm';
+import RegistrationForm from './User/RegistrationForm';
+import axios from 'axios';
 
-  import Footer from './User/Footer';
-  import AboutPage from './User/AboutPage';
-  import SellerRegistrationForm from './User/SellerRegistrationForm';
-  import Navbar from './User/Navbar';
-  import { useState } from 'react';
-  import AddressPage from './User/AddressPage';
-  import Cart from './User/Cart';
-  import products from './assets/Product/product';
+function App() {
+  const [userData, setUserData] = useState({});
+  const [userId, setuserId] = useState({});
+  const [show, setShow] = useState(true);
+  const [cart, setCart] = useState([]);
+  const [warning, setWarning] = useState(false);
 
-  function App() {
-    
-
-    const [show,setShow] = useState(true);
-    const [cart,setCart] =useState([]);
-    const [warning,setWarning] = useState(false);
-
-    const handleClick = (item) => {
-      // Check if the item is already in the cart
-      const isPresent = cart.some(product => product.id === item.id);
-  
-      if (isPresent) {
-          // Display warning message if the item is already in the cart
-          setWarning(true);
-          setTimeout(() => {
-              setWarning(false);
-          }, 2000);
-      } else {
-          // If the item is not already in the cart, add it to the cart
-          setCart([...cart, item]);
-      }
-  };
-  
-
-
-    return (
-      <>
-        <Router>
-      <Navbar size={cart.length} setshow={setShow}/>
-      {
-        warning && (
-          <div className="fixed top-0 right-0 mt-4 mr-4 p-4 rounded-lg shadow-lg text-white bg-red-500">
-          Item already in your cart...
-      </div>
-        )
+  useEffect(() => {
+    const userData = localStorage.getItem('UserData');
+    if(userData) {
+      const data = JSON.parse(userData);
+      setUserData(data);
     }
-        <Routes>
-          <Route path="/" element={<Home handleClick={handleClick}/>} />
-          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick}  />} />
-          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick}  />} />
-          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick}  />} />
-          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick}  />} />
-          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick}  />} />
-          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick}  />} />
-          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick}  />} />
-          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick}  />} />
-        
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/category/:categoryName" element={<Productlist/>} />
-          <Route path="/sellerRegister" element={<SellerRegistrationForm/>}/>
-          
-          <Route path="/cart-view" element={<Cart cart={cart} setCart={setCart} />} />
-          <Route path="/address" element={<AddressPage/>}/>
-        </Routes>
-        <Footer/>
-      </Router>
-      
-      </>
-    )
-  }
+  }, [])
 
-  export default App
+  useEffect(() => {
+    const UId = userData._id;
+    setuserId(UId);
+  }, [userData])
+
+  useEffect(() => {
+    // console.log(userId)
+    if(userId != null) {
+      axios
+      .post("http://localhost:7575/findCartList", {userId})
+      .then((response) => {
+        setCart(response.data)
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
+    }
+    
+  }, [userId])
+
+  const handleClick = (item) => {
+    // Check if the item is already in the cart
+    const isPresent = cart.some(product => product.P_id === item._id);
+    
+    if (isPresent) {
+      // Display warning message if the item is already in the cart
+      setWarning(true);
+      setTimeout(() => {
+        setWarning(false);
+      }, 2000);
+    } else {
+      // create new Item object to add into cart
+      const newItem = {
+        P_id: item._id,
+        U_id: userData._id,
+        title: item.title,
+        banner: item.banner,
+        price: item.price,
+        quantity: 1
+      }
+
+      axios
+        .post('http://localhost:7575/addToCart', newItem)
+        .then((res) => {
+          console.log(res.data.message);
+          // If the item is not already in the cart, add it to the cart
+          setCart([...cart, res.data.newItem]);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  return (
+    <>
+      <Router>
+        <Navbar size={cart.length} show={show} setshow={setShow} />
+        {
+          warning && (
+            <div className="fixed top-0 right-0 mt-4 mr-4 p-4 rounded-lg shadow-lg text-white bg-red-500">
+              Item already in your cart...
+            </div>
+          )
+        }
+        <Routes>
+          <Route path="/" element={<Home handleClick={handleClick} />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/register" element={<RegistrationForm />} />
+          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick} cart={cart} setCart={setCart}/>} />
+          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick} cart={cart} setCart={setCart}/>} />
+          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick} cart={cart} setCart={setCart}/>} />
+          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick} cart={cart} setCart={setCart}/>} />
+          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick} cart={cart} setCart={setCart}/>} />
+          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick} cart={cart} setCart={setCart}/>} />
+          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick} cart={cart} setCart={setCart}/>} />
+          <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick} cart={cart} setCart={setCart}/>} />
+
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/category/:categoryName" element={<Productlist />} />
+          <Route path="/sellerRegister" element={<SellerRegistrationForm />} />
+
+          <Route path="/cart-view" element={<Cart cart={cart} setCart={setCart} />} />
+          <Route path="/address" element={<AddressPage />} />
+        </Routes>
+        <Footer />
+      </Router>
+
+    </>
+  )
+}
+
+export default App

@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+// import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 const AddressPage = () => {
   const { sellerIds } = useParams(); // Fetch the sellerId from the URL
-  const [orders, setOrders] = useState({}); // Store orders for each seller
+  // const [orders, setOrders] = useState({}); // Store orders for each seller
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -15,16 +16,16 @@ const AddressPage = () => {
     country: '',
   });
 
-  useEffect(() => {
-    if (!sellerIds) return;
-    // Initialize orders for the current seller if not already present
-    if (!orders[sellerIds]) {
-      setOrders(prevOrders => ({
-        ...prevOrders,
-        [sellerIds]: [],
-      }));
-    }
-  }, [sellerIds, orders]);
+  // useEffect(() => {
+  //   if (!sellerIds) return;
+  //   // Initialize orders for the current seller if not already present
+  //   if (!orders[sellerIds]) {
+  //     setOrders(prevOrders => ({
+  //       ...prevOrders,
+  //       [sellerIds]: [],
+  //     }));
+  //   }
+  // }, [sellerIds, orders]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,38 +35,38 @@ const AddressPage = () => {
     });
   };
 
-  const generateOrderId = () => {
-    // Generate a unique order ID (you can use a library like uuid for this)
-    return Math.random().toString(36).substr(2, 9); // Example: Generating a random string
-  };
+  // const generateOrderId = () => {
+  //   // Generate a unique order ID (you can use a library like uuid for this)
+  //   return Math.random().toString(36).substr(2, 9); // Example: Generating a random string
+  // };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    const orderId = generateOrderId();
-    const order = {
-      orderId,
-      sellerId: sellerIds, // Adding sellerId to the order object
-      ...formData,
-    };
+  //   e.preventDefault();
+  //   const orderId = generateOrderId();
+  //   const order = {
+  //     orderId,
+  //     sellerId: sellerIds, // Adding sellerId to the order object
+  //     ...formData,
+  //   };
 
     // Add the order to the orders list for the current seller
-    setOrders(prevOrders => ({
-      ...prevOrders,
-      [sellerIds]: [...prevOrders[sellerIds], order],
-    }));
+    // setOrders(prevOrders => ({
+    //   ...prevOrders,
+    //   [sellerIds]: [...prevOrders[sellerIds], order],
+    // }));
 
     // Reset the form data
-    setFormData({
-      fullName: '',
-      addressLine1: '',
-      addressLine2: '',
-      city: '',
-      state: '',
-      zipCode: '',
-      country: '',
-    });
+    // setFormData({
+    //   fullName: '',
+    //   addressLine1: '',
+    //   addressLine2: '',
+    //   city: '',
+    //   state: '',
+    //   zipCode: '',
+    //   country: '',
+    // });
 
-    console.log('Submitted Order:', order);
+    console.log('Submitted Order:', e, sellerIds);
     // You can handle further logic here, like sending the order data to the backend
   };
 
