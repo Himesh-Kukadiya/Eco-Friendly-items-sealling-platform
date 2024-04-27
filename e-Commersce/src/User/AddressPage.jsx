@@ -1,10 +1,10 @@
-import { useState } from 'react';
-// import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { PropTypes } from 'prop-types';
+import axios from 'axios';
 
-const AddressPage = () => {
-  const { sellerIds } = useParams(); // Fetch the sellerId from the URL
-  // const [orders, setOrders] = useState({}); // Store orders for each seller
+const AddressPage = (props) => {
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -14,18 +14,16 @@ const AddressPage = () => {
     state: '',
     zipCode: '',
     country: '',
+    totalAmount: props.price
   });
 
-  // useEffect(() => {
-  //   if (!sellerIds) return;
-  //   // Initialize orders for the current seller if not already present
-  //   if (!orders[sellerIds]) {
-  //     setOrders(prevOrders => ({
-  //       ...prevOrders,
-  //       [sellerIds]: [],
-  //     }));
-  //   }
-  // }, [sellerIds, orders]);
+
+  // price validation
+  useEffect(() => {
+    if (props.price === 0) {
+      navigate('/cart-view');
+    }
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,40 +33,43 @@ const AddressPage = () => {
     });
   };
 
-  // const generateOrderId = () => {
-  //   // Generate a unique order ID (you can use a library like uuid for this)
-  //   return Math.random().toString(36).substr(2, 9); // Example: Generating a random string
-  // };
-
-  const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   const orderId = generateOrderId();
-  //   const order = {
-  //     orderId,
-  //     sellerId: sellerIds, // Adding sellerId to the order object
-  //     ...formData,
-  //   };
-
-    // Add the order to the orders list for the current seller
-    // setOrders(prevOrders => ({
-    //   ...prevOrders,
-    //   [sellerIds]: [...prevOrders[sellerIds], order],
-    // }));
-
-    // Reset the form data
-    // setFormData({
-    //   fullName: '',
-    //   addressLine1: '',
-    //   addressLine2: '',
-    //   city: '',
-    //   state: '',
-    //   zipCode: '',
-    //   country: '',
-    // });
-
-    console.log('Submitted Order:', e, sellerIds);
-    // You can handle further logic here, like sending the order data to the backend
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data: { order, orderId } } = await axios.post("http://localhost:7575/makeOrder", { cart: props.cart, customerData: formData });
+      const { data: { key } } = await axios.get("http://localhost:7575/getKey");
+      
+      const options = {
+        key: key,
+        amount: Number(order.amount),
+        currency: "INR",
+        name: "EcoS's",
+        description: "Pay & Checkout products at your home",
+        image: "https://media.geeksforgeeks.org/wp-content/uploads/20210806114908/dummy-200x200.png",
+        order_id: order.id,
+        callback_url: `http://localhost:7575/paymentVarify?id=${orderId}`,
+        prefill: {
+          contact: localStorage.getItem("boxKeeperData").BKMobile,
+          name: localStorage.getItem("boxKeeperData").BKName,
+          email: localStorage.getItem("boxKeeperData").BKEmail
+        },
+        notes: {
+          access: "this payment for item order"
+        },
+        theme: {
+          color: "#121212"
+        }
+      };
+  
+      const razor = new window.Razorpay(options);
+      razor.open();
+    } catch (error) {
+      console.error("Error occurred:", error);
+      // Handle any errors, such as network issues or server errors
+    }
   };
+  
+  
 
   return (
     <div className="container mx-auto mt-8">
@@ -103,11 +104,17 @@ const AddressPage = () => {
           <input type="text" id="country" name="country" value={formData.country} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
         </div>
         <div className="flex justify-center">
-          <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
+          <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Procees</button>
         </div>
       </form>
     </div>
   );
 };
+
+AddressPage.propTypes = {
+  price: PropTypes.number.isRequired,
+  cart: PropTypes.array.isRequired,
+  userId: PropTypes.string.isRequired,
+}
 
 export default AddressPage;

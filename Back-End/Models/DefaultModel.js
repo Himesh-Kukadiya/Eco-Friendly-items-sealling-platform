@@ -22,11 +22,51 @@ const Carts = mongoose.model('Carts', {
         ref: 'Users',
         required: true
     },
+    sellerId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Sellers',
+        required: true
+    },
     title: String,
     banner: String,
     price: Number,
-    quantity: Number
+    quantity: Number,
 }, 'Carts');
 
+const dumyOrder = mongoose.model('dumyOrders', {
+    U_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Products',
+        required: true
+    },
+    ProductList: [Object],
+    TotalAmount: Number,
+    FullName: String,
+    Address1: String,
+    Address2: String,
+    City: String,
+    State: String,
+    Zip: String,
+    Country: String,
+    date: Date
+}, 'dumyOrders');
 
-module.exports = { BannerImages, Categories, Carts };
+const Order = mongoose.model('Orders', {
+    U_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Products',
+        required: true
+    },
+    ProductList: [Object],
+    TotalAmount: Number,
+    FullName: String,
+    Address1: String,
+    Address2: String,
+    City: String,
+    State: String,
+    Zip: String,
+    Country: String,
+    date: Date
+}, 'Orders');
+
+module.exports = { BannerImages, Categories, Carts, Order, dumyOrder };

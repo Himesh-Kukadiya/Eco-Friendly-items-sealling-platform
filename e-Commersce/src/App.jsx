@@ -12,12 +12,16 @@ import Cart from './User/Cart';
 import LoginForm from './User/LoginForm';
 import RegistrationForm from './User/RegistrationForm';
 import axios from 'axios';
+import OtpVarification from './User/OtpVarification';
 
 function App() {
   const [userData, setUserData] = useState({});
   const [userId, setuserId] = useState({});
+  const [otp, setOtp] = useState("");
+  const [newUser, setNewUser] = useState({});
   const [show, setShow] = useState(true);
   const [cart, setCart] = useState([]);
+  const [price, setPrice] = useState(0); // for cart
   const [warning, setWarning] = useState(false);
 
   useEffect(() => {
@@ -62,6 +66,7 @@ function App() {
       // create new Item object to add into cart
       const newItem = {
         P_id: item._id,
+        sellerId: item.sellerId,
         U_id: userData._id,
         title: item.title,
         banner: item.banner,
@@ -96,7 +101,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home handleClick={handleClick} />} />
           <Route path="/login" element={<LoginForm />} />
-          <Route path="/register" element={<RegistrationForm />} />
+          <Route path="/register" element={<RegistrationForm setOtp={setOtp} setNewUser={setNewUser} />} />
+          <Route path="/emailVarification" element={ <OtpVarification otp={otp} userData={newUser} setOtp={setOtp} /> } />
           <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick} cart={cart} setCart={setCart}/>} />
           <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick} cart={cart} setCart={setCart}/>} />
           <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick} cart={cart} setCart={setCart}/>} />
@@ -109,9 +115,10 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/category/:categoryName" element={<Productlist />} />
           <Route path="/sellerRegister" element={<SellerRegistrationForm />} />
+          <Route path="/sellerRegister" element={<SellerRegistrationForm />} />
 
-          <Route path="/cart-view" element={<Cart cart={cart} setCart={setCart} />} />
-          <Route path="/address" element={<AddressPage />} />
+          <Route path="/cart-view" element={<Cart cart={cart} setCart={setCart} price={price} setPrice={setPrice} />} />
+          <Route path="/address" element={<AddressPage price={price} cart={cart} userId={userId} />} />
         </Routes>
         <Footer />
       </Router>

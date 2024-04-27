@@ -27,7 +27,6 @@ const findCartList = async (req, res) => {
                 return res.status(200).send(cartList);
             }
             res.status(200).send(cartList);
-            console.log(cartList);
         }
     }
     catch (error) {

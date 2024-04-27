@@ -5,12 +5,19 @@ import axios from 'axios';
 
 const Cart = (props) => {
     const navigate = useNavigate();
-    const [price, setPrice] = useState(0);
     const [counts, setCounts] = useState({}); // State to store counts for each item
 
     useEffect(() => {
         calculatePrice();
     }, [props.cart, counts]);
+
+    function calculatePrice() {
+        let totalPrice = 0;
+        props.cart.forEach(item => {
+            totalPrice += (counts[item._id] || 1) * item.price; // Use the count from the counts state
+        });
+        props.setPrice(totalPrice);
+    }
 
     // Function to increment or decrement the count for a specific item
     const handleCountChange = (id, delta) => {
@@ -26,14 +33,6 @@ const Cart = (props) => {
             })
             .catch((error) => console.log(error.response.data.message));
     };
-
-    function calculatePrice() {
-        let totalPrice = 0;
-        props.cart.forEach(item => {
-            totalPrice += (counts[item._id] || 1) * item.price; // Use the count from the counts state
-        });
-        setPrice(totalPrice);
-    }
 
     // Function to handle removing an item from the cart
     const handleRemove = (id) => {
@@ -64,15 +63,9 @@ const Cart = (props) => {
         setCounts(initialCounts);
     }, [props.cart]);
 
-    // Function to handle proceeding to checkout or some other action
     const handleProceed = () => {
-        // Extracting only the IDs from the cart array
-        const ids = props.cart.map(item => item.sellerId);
-        const sellerIds = ids.toString();
-
         // Constructing the URL with cart IDs as a query parameter
-        navigate(`/address?sellerIds=${sellerIds}`);
-
+        navigate(`/address`);
     };
 
     return (
@@ -110,7 +103,7 @@ const Cart = (props) => {
                         </tbody>
                     </table>
                     <div className="mt-4">
-                        <span className="font-bold">Total Price: ₹ {price}</span>
+                        <span className="font-bold">Total Price: ₹ {props.price}</span>
                     </div>
                     <button onClick={handleProceed} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md">Proceed</button>
                 </>
@@ -131,6 +124,8 @@ Cart.propTypes = {
         })
     ).isRequired,
     setCart: PropTypes.func.isRequired,
+    price: PropTypes.number.isRequired,
+    setPrice: PropTypes.func.isRequired
 };
 
 

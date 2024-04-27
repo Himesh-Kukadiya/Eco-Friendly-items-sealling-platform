@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
 import {useNavigate} from 'react-router-dom';
+import {PropTypes} from 'prop-types';
 
-const RegistrationForm = () => {
+const RegistrationForm = (props) => {
   const navigate = useNavigate();
   const [message, setMessage] = useState("");
   const [errStatus, setErrorStatus] = useState(false);
@@ -34,11 +35,14 @@ const RegistrationForm = () => {
       }
 
       axios
-      .post("http://127.0.0.1:7575/signup", userData)
+      .post("http://127.0.0.1:7575/sendOtp", {UEmail: userData.UEmail, UName: userData.UName})
       .then((response) => {
-        setMessage(response.data.message);
-        localStorage.setItem("UserData" , JSON.stringify(response.data.newUserData))
-        navigate("/emailVarification");
+
+        setMessage(response.data.message); // set message
+        props.setOtp(response.data.otp) // set otp to app.jsx
+        props.setNewUser(userData); // set new user data to app.jsx
+
+          navigate("/emailVarification");
       })
       .catch((error) => {
         setMessage(error.response.data.message);
@@ -137,5 +141,10 @@ const RegistrationForm = () => {
     </div>
   );
 };
+
+RegistrationForm.propTypes = {
+  setOtp: PropTypes.func.isRequired,
+  setNewUser: PropTypes.func.isRequired,
+}
 
 export default RegistrationForm;
