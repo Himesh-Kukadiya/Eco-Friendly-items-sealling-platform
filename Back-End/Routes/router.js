@@ -63,4 +63,8 @@ router
     .route('/paymentVarify') 
     .post(orderController.paymentVarify);
 
+router 
+    .route('/getOrderHistory') 
+    .post(orderController.getOrderHistory);
+
 module.exports = router;

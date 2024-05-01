@@ -87,7 +87,9 @@ const Cart = (props) => {
                             {props.cart.map(item => (
                                 <tr key={item.P_id}>
                                     <td className="border px-4 py-2">
-                                        <img src={item.banner} alt={item.title} className="h-16 w-16 object-cover" />
+                                        <center>
+                                        <img src={item.banner} alt={item.title} className="h-20 w-20 object-cover" style={{borderRadius: 100, boxShadow: "2px 2px 10px black"}} />
+                                        </center>
                                     </td>
                                     <td className="border px-4 py-2">
                                         <button className="px-2 py-1 bg-gray-200 rounded-md" onClick={() => { handleCountChange(item._id, 1);}}>+</button>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 import {PropTypes} from 'prop-types';
 
 const RegistrationForm = (props) => {
@@ -31,7 +31,7 @@ const RegistrationForm = (props) => {
         UName : formData.username,
         UEmail : formData.email,
         UPassword : formData.password,
-        UImage: "default.png",
+        UImage: "default.jpeg",
       }
 
       axios
@@ -135,6 +135,9 @@ const RegistrationForm = (props) => {
 
           <div className={errStatus ? "text-red-600" : "text-green-600"}>
             {message}
+          </div>
+          <div>
+            <Link to="/Login"> All Ready Have An Account ? Login</Link>
           </div>
         </form>
       </div>

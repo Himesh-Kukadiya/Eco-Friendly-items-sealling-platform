@@ -110,8 +110,49 @@ const paymentVarify = async (req, res) => {
     }
 };
 
+const getOrderHistory = async (req, res) => {
+    try {
+        const { UId } = req.body;
+        const orderModal = defaultModal.Order;
+        const orders = await orderModal.find({ U_id: UId });
+
+        let allOrders = [];
+
+        await Promise.all(orders.map(async (order) => {
+            for (const pl of order.ProductList) {
+                const productDetail = await productModal.findById(pl.P_id);
+                if (productDetail) {
+                    allOrders.push({
+                        OId: order._id,
+                        PId: pl.P_id,
+                        PImage: productDetail.banner,
+                        PName: productDetail.title,
+                        SId: pl.S_id,
+                        Price: productDetail.price,
+                        Quantity: pl.quantity,
+                        Total: productDetail.price * pl.quantity,
+                        Date: order.date ? order.date.toISOString().split('T')[0] : 'Date not spacified'
+                    });
+                }
+            }
+        }));
+
+        console.log(allOrders);
+        
+        if(allOrders.length > 0) {
+            return res.status(200).json({allOrders});
+        }
+        res.status(404).json({message: "No Orders found"});
+    } catch (e) {
+        console.error(e);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+
 
 module.exports = {
     makeOrder,
-    paymentVarify
+    paymentVarify,
+    getOrderHistory
 }

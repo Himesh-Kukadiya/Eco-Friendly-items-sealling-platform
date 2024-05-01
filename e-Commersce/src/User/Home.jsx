@@ -113,7 +113,7 @@ const Home = (props) => {
                     </section>
                     <section className="hidden">
                         {products.map(product => (
-                            <Productlist key={product._id + Date.now()} product={product} handleClick={product.handleClick} />
+                            <Productlist key={Date.now()} product={product} handleClick={product.handleClick} />
                         ))}
                     </section>
                 </div>

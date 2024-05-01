@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, Link} from 'react-router-dom';
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -88,6 +88,9 @@ const LoginForm = () => {
 
           <div className={errStatus ? "text-red-600" : "text-green-600"}>
             {message}
+          </div>
+          <div>
+            <Link to="/register"> I Dont Have An Account ? Signup</Link>
           </div>
         </form>
       </div>

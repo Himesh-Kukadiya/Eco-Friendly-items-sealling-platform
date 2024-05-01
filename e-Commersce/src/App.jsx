@@ -13,6 +13,8 @@ import LoginForm from './User/LoginForm';
 import RegistrationForm from './User/RegistrationForm';
 import axios from 'axios';
 import OtpVarification from './User/OtpVarification';
+import UserProfilePage from './User/UserProfilePage';
+import OrderHistory from './User/OrderHistory copy';
 
 function App() {
   const [userData, setUserData] = useState({});
@@ -100,8 +102,6 @@ function App() {
         }
         <Routes>
           <Route path="/" element={<Home handleClick={handleClick} />} />
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/register" element={<RegistrationForm setOtp={setOtp} setNewUser={setNewUser} />} />
           <Route path="/emailVarification" element={ <OtpVarification otp={otp} userData={newUser} setOtp={setOtp} /> } />
           <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick} cart={cart} setCart={setCart}/>} />
           <Route path="/category/:categoryName" element={<Productlist handleClick={handleClick} cart={cart} setCart={setCart}/>} />
@@ -119,6 +119,11 @@ function App() {
 
           <Route path="/cart-view" element={<Cart cart={cart} setCart={setCart} price={price} setPrice={setPrice} />} />
           <Route path="/address" element={<AddressPage price={price} cart={cart} userId={userId} />} />
+
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/register" element={<RegistrationForm setOtp={setOtp} setNewUser={setNewUser} />} />
+          <Route path="/Myprofile" element={<UserProfilePage />} />
+          <Route path="/order-history" element={<OrderHistory UId={userId} />} />
         </Routes>
         <Footer />
       </Router>
