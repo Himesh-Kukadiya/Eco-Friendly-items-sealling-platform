@@ -14,11 +14,11 @@ import RegistrationForm from './User/RegistrationForm';
 import axios from 'axios';
 import OtpVarification from './User/OtpVarification';
 import UserProfilePage from './User/UserProfilePage';
-import OrderHistory from './User/OrderHistory copy';
+import OrderHistory from './User/OrderHistory';
 
 function App() {
   const [userData, setUserData] = useState({});
-  const [userId, setuserId] = useState({});
+  const [userId, setuserId] = useState();
   const [otp, setOtp] = useState("");
   const [newUser, setNewUser] = useState({});
   const [show, setShow] = useState(true);
@@ -40,7 +40,6 @@ function App() {
   }, [userData])
 
   useEffect(() => {
-    // console.log(userId)
     if(userId != null) {
       axios
       .post("http://localhost:7575/findCartList", {userId})
@@ -118,7 +117,7 @@ function App() {
           <Route path="/sellerRegister" element={<SellerRegistrationForm />} />
 
           <Route path="/cart-view" element={<Cart cart={cart} setCart={setCart} price={price} setPrice={setPrice} />} />
-          <Route path="/address" element={<AddressPage price={price} cart={cart} userId={userId} />} />
+          <Route path="/address" element={<AddressPage price={price} cart={cart} userId={userId ?? ""} />} />
 
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegistrationForm setOtp={setOtp} setNewUser={setNewUser} />} />

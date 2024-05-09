@@ -73,10 +73,9 @@ const getbannerImage = async (req, res) => {
 }
 
 
-
 module.exports = {
     getImages,
     getCategories,
     getCategoryNames,
-    getbannerImage
+    getbannerImage,
 }

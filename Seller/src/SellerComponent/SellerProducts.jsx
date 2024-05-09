@@ -1,42 +1,40 @@
 import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types'; // Import PropTypes
 import ProductList from './ProductList';
-import productData from '../assets/Product/product'; // Import product data from product.js
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const SellerProducts = ({ seller }) => {
+const sellerData = JSON.parse(localStorage.getItem('SellerData'));
+const SellerProducts = () => {
+  const navigate = useNavigate();
+
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    // Simulate fetching products for the specific seller
-    const fetchSellerProducts = () => {
-      // Filter productData based on sellerId
-      const sellerProducts = productData.filter(product => product.sellerId === seller.sellerId);
-      setProducts(sellerProducts);
-    };
+    if(!sellerData) {
+      navigate('/');
+    }
+    else {
+      const sellerId = sellerData._id;
+      axios.post("http://localhost:7575/getSellerProducts", {sellerId})
+      .then((response) => {
+        setProducts(response.data.sellerProducts);
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
+    }
+  }, []);
 
-    fetchSellerProducts();
-  }, [seller.sellerId]);
 
   return (
     <div className="container mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Seller: {seller.name}</h1>
-      <p>Email: {seller.email}</p>
-      <p>Location: {seller.location}</p>
-      <h2 className="text-xl font-semibold mt-4">Products:</h2>
+      <h1 className="text-2xl font-bold mb-4">Seller: {sellerData.sellername}</h1>
+      <p>Email: {sellerData.selleremail}</p>
+      <p>Mobile: {sellerData.mobile}</p>
+      <br />
       <ProductList products={products} />
     </div>
   );
-};
-
-// Define prop types for SellerProducts
-SellerProducts.propTypes = {
-  seller: PropTypes.shape({
-    sellerId: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    location: PropTypes.string.isRequired,
-    // Add more PropTypes for other seller properties as needed
-  }).isRequired,
 };
 
 export default SellerProducts;

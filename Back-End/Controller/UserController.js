@@ -1,5 +1,7 @@
 
 const UserModel = require('../Models/UserModel');
+const SellerModal = require('../Models/SellerModel');
+const sellerModal = require('../Models/SellerModel');
 
 const sendOtp = async (req, res) => {
     try{
@@ -67,6 +69,36 @@ const login = async (req, res) => {
     }
 }
 
+const sendRequestToSeller = async (req, res) => {
+    try {
+        const {sellerData} = (req.body)
+        const newSellerData = await SellerModal.create(sellerData);
+        if(newSellerData) {
+            return res.status(200).json({message:'Now You can Login as Seller', newSellerData});
+        }
+        res.status(400).json({message: 'Internal Server Error'});
+    }
+    catch(e) {
+        console.log(e.message);
+        res.status(400).json({message: 'Internal Server Error'});
+    }
+}
+
+const sellerStatus = async (req, res) => {
+    try {
+        const { UId } = req.body; // Destructuring to get UId from req.body
+        const sellerData = await sellerModal.findOne({ UId: UId }); // Using UId to find sellerData
+        if (sellerData) {
+            return res.status(200).json({ message: 'Seller found' });
+        }
+        res.status(404).json({ message: 'Seller not found' });
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+
 module.exports = {
-    sendOtp, login, signup
+    sendOtp, login, signup, sendRequestToSeller,sellerStatus
 }

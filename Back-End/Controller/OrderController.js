@@ -16,15 +16,17 @@ const razorpay = new Razorpay({
 const defaultModal = require('../Models/DefaultModel');
 const productModal = require('../Models/ProductModel');
 const userModal = require('../Models/UserModel');
+const orderModal = defaultModal.Order;
 
 const makeOrder = async (req, res) => {
     try {
         const orderModal = defaultModal.dumyOrder;
 
         const { cart, customerData } = (req.body)
+
         const ProductList = cart.reduce((acc, item) => {
             const { sellerId, P_id, quantity, price } = item;
-            acc.push({ P_id, S_id: sellerId, quantity, price });
+            acc.push({ P_id, S_id: sellerId, quantity: quantity, price, status: 'Pending' });
             return acc;
         }, []);
 
@@ -33,8 +35,8 @@ const makeOrder = async (req, res) => {
             ProductList,
             TotalAmount: customerData.totalAmount,
             FullName: customerData.fullName,
-            Address1: customerData.addressLine1,
-            Address2: customerData.addressLine2,
+            Address: customerData.address,
+            Mobile: customerData.mobile,
             City: customerData.city,
             State: customerData.state,
             Zip: customerData.zipCode,
@@ -62,7 +64,7 @@ const makeOrder = async (req, res) => {
 const paymentVarify = async (req, res) => {
     try {
         const dumyOrderModal = defaultModal.dumyOrder;
-        const orderModal = defaultModal.Order;
+        
         const { id } = req.query;
 
         const dumyOrder = await dumyOrderModal.findById(id);
@@ -72,8 +74,8 @@ const paymentVarify = async (req, res) => {
                 ProductList: dumyOrder.ProductList,
                 TotalAmount: dumyOrder.TotalAmount,
                 FullName: dumyOrder.FullName,
-                Address1: dumyOrder.Address1,
-                Address2: dumyOrder.Address2,
+                Address: dumyOrder.Address,
+                Mobile: dumyOrder.Mobile,
                 City: dumyOrder.City,
                 State: dumyOrder.State,
                 Zip: dumyOrder.Zip,
@@ -113,16 +115,16 @@ const paymentVarify = async (req, res) => {
 const getOrderHistory = async (req, res) => {
     try {
         const { UId } = req.body;
-        const orderModal = defaultModal.Order;
+        
         const orders = await orderModal.find({ U_id: UId });
 
-        let allOrders = [];
+        const allOrders = [];
 
         await Promise.all(orders.map(async (order) => {
             for (const pl of order.ProductList) {
                 const productDetail = await productModal.findById(pl.P_id);
                 if (productDetail) {
-                    allOrders.push({
+                    const detail = ({
                         OId: order._id,
                         PId: pl.P_id,
                         PImage: productDetail.banner,
@@ -131,28 +133,75 @@ const getOrderHistory = async (req, res) => {
                         Price: productDetail.price,
                         Quantity: pl.quantity,
                         Total: productDetail.price * pl.quantity,
-                        Date: order.date ? order.date.toISOString().split('T')[0] : 'Date not spacified'
+                        Date: order.date ? order.date.toISOString().split('T')[0] : 'Date not specified',
+                        Status: pl.status
                     });
+                    allOrders.push(detail)
                 }
             }
         }));
-
-        console.log(allOrders);
-        
-        if(allOrders.length > 0) {
-            return res.status(200).json({allOrders});
+        if(!allOrders) {
+            res.status(404).json({message: "No Orders found"});
         }
-        res.status(404).json({message: "No Orders found"});
+        res.status(200).json({allOrders});
     } catch (e) {
         console.error(e);
         return res.status(500).json({ message: 'Internal Server Error' });
     }
 }
 
+const cancelOrder = async (req, res) => {
+    try {
+        const {orderId} = (req.body)
+        console.log(orderId)
+        
+        const deleteOrder = await orderModal.findByIdAndDelete({_id: orderId});
+        if(deleteOrder) {
+            return res.status(204).json({message: "Order deleted successfully"});
+        }
+        return res.status(404).json({message: "order not found"})
+    }
+    catch(e) {
+        console.log(e.message);
+        res.status(400).json({message: 'Internal Server Error'});
+    }
+}
+
+const updateStatus = async (req, res) => {
+    try {
+        const { orderId, status, PId } = req.body;
+        const order = await orderModal.findById({ _id: orderId });
+        let index = undefined;
+        order.ProductList.forEach((pl, ind) => {
+            if (pl.P_id === PId) {
+                index = ind;
+            }
+        });
+        if (index !== undefined) {
+            order.ProductList[index].status = status;
+            console.log(order.ProductList[index]);
+            
+            const updateOrder = await orderModal.findByIdAndUpdate({ _id: orderId }, order);
+            if (updateOrder) {
+                return res.status(200).json({ message: "Order status updated successfully" });
+            }
+            return res.status(404).json({ message: "Order not found" });
+        } else {
+            console.log("Product not found in the order.");
+            res.status(404).json({ message: "Product not found in the order." });
+        }
+    }
+    catch(e) {
+        console.log(e.message);
+        res.status(400).json({ message: 'Internal Server Error' });
+    }
+}
 
 
 module.exports = {
     makeOrder,
     paymentVarify,
-    getOrderHistory
+    getOrderHistory,
+    cancelOrder,
+    updateStatus
 }

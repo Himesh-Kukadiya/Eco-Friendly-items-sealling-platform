@@ -11,6 +11,7 @@ require('./DB/DB_Config');
 
 // middlewares
 app.use(express.json());
+app.use(express.static('Public'))
 
 const routes = require('./Routes/router');
 app.use("/", routes);

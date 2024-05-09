@@ -35,7 +35,6 @@ const LoginForm = () => {
         setMessage(error.response.data.message);
         setErrorStatus(true)
       });
-    console.log(formData);
   };
 
   return (

@@ -8,12 +8,13 @@ const AddressPage = (props) => {
 
   const [formData, setFormData] = useState({
     fullName: '',
-    addressLine1: '',
-    addressLine2: '',
+    address: '',
+    mobile: '',
     city: '',
     state: '',
     zipCode: '',
     country: '',
+    status: 'Pending',
     totalAmount: props.price
   });
 
@@ -49,9 +50,10 @@ const AddressPage = (props) => {
         order_id: order.id,
         callback_url: `http://localhost:7575/paymentVarify?id=${orderId}`,
         prefill: {
-          contact: localStorage.getItem("boxKeeperData").BKMobile,
-          name: localStorage.getItem("boxKeeperData").BKName,
-          email: localStorage.getItem("boxKeeperData").BKEmail
+          // contact: localStorage.getItem("UserData").BKMobile,
+          contact: "9887766787",
+          name: localStorage.getItem("UserData").UName,
+          email: localStorage.getItem("UserData").UEmail
         },
         notes: {
           access: "this payment for item order"
@@ -80,12 +82,12 @@ const AddressPage = (props) => {
           <input type="text" id="fullName" name="fullName" value={formData.fullName} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
         </div>
         <div className="mb-4">
-          <label htmlFor="addressLine1" className="block text-gray-700 font-bold mb-2 text-left">Address Line 1</label>
-          <input type="text" id="addressLine1" name="addressLine1" value={formData.addressLine1} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
+          <label htmlFor="address" className="block text-gray-700 font-bold mb-2 text-left">Address </label>
+          <input type="text" id="address" name="address" value={formData.address} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required />
         </div>
         <div className="mb-4">
-          <label htmlFor="addressLine2" className="block text-gray-700 font-bold mb-2 text-left">Address Line 2</label>
-          <input type="text" id="addressLine2" name="addressLine2" value={formData.addressLine2} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+          <label htmlFor="mobile" className="block text-gray-700 font-bold mb-2 text-left">Mobile</label>
+          <input type="text" id="mobile" name="mobile" value={formData.mobile} onChange={handleChange} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
         </div>
         <div className="mb-4">
           <label htmlFor="city" className="block text-gray-700 font-bold mb-2 text-left">City</label>

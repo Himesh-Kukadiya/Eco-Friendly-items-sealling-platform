@@ -42,8 +42,8 @@ const dumyOrder = mongoose.model('dumyOrders', {
     ProductList: [Object],
     TotalAmount: Number,
     FullName: String,
-    Address1: String,
-    Address2: String,
+    Address: String,
+    Mobile: String,
     City: String,
     State: String,
     Zip: String,
@@ -60,13 +60,14 @@ const Order = mongoose.model('Orders', {
     ProductList: [Object],
     TotalAmount: Number,
     FullName: String,
-    Address1: String,
-    Address2: String,
+    Address: String,
+    Mobile: String,
     City: String,
     State: String,
     Zip: String,
     Country: String,
     date: Date
 }, 'Orders');
+
 
 module.exports = { BannerImages, Categories, Carts, Order, dumyOrder };

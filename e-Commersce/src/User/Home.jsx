@@ -60,7 +60,7 @@ const Home = (props) => {
     for (let i = 0; i < iteration;) {
         // Push JSX elements into the 'categoryBanners' array
         categoryBanners.push(
-            <div key={i} className="mr-2 mt-3 mb-5 rounded-lg">
+            <div key={i + Date.now()} className="mr-2 mt-3 mb-5 rounded-lg">
                 <Link to={`/category/${categoryName[i]}`}>
                     <div className="mr-2 mb-5 rounded-lg">
                         <img src={categoryImages[i]} className="w-60 h-100" alt="Display image" />
@@ -113,7 +113,7 @@ const Home = (props) => {
                     </section>
                     <section className="hidden">
                         {products.map(product => (
-                            <Productlist key={Date.now()} product={product} handleClick={product.handleClick} />
+                            <Productlist key={Date.now() + product._id} product={product} handleClick={product.handleClick} />
                         ))}
                     </section>
                 </div>

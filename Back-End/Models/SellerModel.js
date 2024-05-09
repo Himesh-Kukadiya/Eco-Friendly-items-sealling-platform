@@ -1,12 +1,19 @@
+
+
 const mongoose = require('mongoose');
 
-const UserModal = mongoose.model('Seller', {
-    SellerId: Number,
-    sellername: String,
-    selleremail: String,
-    mobile: String,
+const sellerModal = mongoose.model('Sellers', {
+    UId : {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Userss',
+        required: true
+    },
+    sellername : String,
+    selleremail : String,
+    mobile : String,
     adharno: String,
-    password: String
-}, 'Seller');
+    about: String,
+    password: String,
+}, 'Sellers');
 
-module.exports = UserModal;
+module.exports = sellerModal
