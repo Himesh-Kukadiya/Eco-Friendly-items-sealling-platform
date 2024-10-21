@@ -135,6 +135,9 @@ router
 
 // Admin Controller
 router 
+    .route('/adminLogin')
+    .post(adminController.adminLogin)
+router 
     .route('/getCounter')
     .get(adminController.getCounter)
 router 

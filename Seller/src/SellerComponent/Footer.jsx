@@ -10,7 +10,7 @@ export default function Footer() {
           </div>
   
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto max-w-7xl text-center">
-              <div className=" mb-5 rounded-full w-72 h-72 ml-10" style={{backgroundColor:"#AEBE98"}}>
+          <div className=" mb-5 rounded-full w-72 h-72 ml-10" style={{backgroundColor:"#AEBE98"}}>
                   <h3 className="text-center p-8">Zero-plastic gifting</h3>
                   <p className="text-center">We provide thoughtfully curated, zero-plastic gift hampers across a range of themes and products. Celebrate your favourite people, your favourite events - all while causing no harm to our planet.</p>
               </div>

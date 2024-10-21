@@ -3,7 +3,32 @@ const defaultModal = require('../Models/DefaultModel')
 const orderModal = defaultModal.Order;
 const userModal = require('../Models/UserModel')
 const sellerModal = require('../Models/SellerModel')
+const adminModal = require('../Models/adminModel')
 
+const adminLogin = async(req, res) => {
+    const { email, password } = req.body;
+    try {
+        const adminData = await adminModal.findOne({ AEmail: email });
+        if (!adminData) { // check boxkeeper or not...
+            return res.status(404).json({ isLoggedIn: false, message: 'Admin not found' });
+        }
+        if (password != adminData.APassword) { // check cradentioal
+            return res.status(401).json({ isLoggedIn: false, message: 'Invalid credentials' });
+        }
+        const admin = {
+            _id: adminData._id,
+            AName : adminData.AName,
+            AMobile : adminData.AMobile,
+            AEmail : adminData.AEmail,
+            AImageURL : adminData.AImageURL
+        }
+        // send data with login success...
+        res.status(200).json({ isLoggedIn: true, message: 'Login successful', data: admin });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: 'Server error' });
+    }
+}
 const getCounter = async (req, res) => {
     try{
         const counter = {
@@ -81,12 +106,13 @@ const getOrders = async (req, res) => {
 
         for (const ord of order) {
             for (const prod of ord.ProductList) {
-                const productDetail = await productModal.findById(prod.P_id).populate("sellerId");
+                const sellerData = await sellerModal.findById({_id: prod.S_id})
+                const productDetail = await productModal.findById(prod.P_id);
                 orders.push({
                     Image: productDetail.banner,
                     Product: productDetail.title,
                     User: ord.FullName,
-                    Seller: productDetail.sellerId.sellername, // Access sellername from populated sellerId
+                    Seller: sellerData.sellername, // Access sellername from populated sellerId
                     Category: productDetail.category,
                     Status: prod.status,
                     Price: prod.price,
@@ -146,8 +172,8 @@ const getMonthlySelling = async (req, res) => {
     }
 };
 
-
 module.exports = {
+    adminLogin,
     getCounter,
     getUserDerail,
     getSellers,

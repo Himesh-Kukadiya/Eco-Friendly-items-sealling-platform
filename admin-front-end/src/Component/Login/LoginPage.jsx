@@ -25,7 +25,7 @@ const LoginPage = () => {
     const loginRequest = (e) => {
         e.preventDefault();
         axios
-        .post("http://127.0.0.1:2020/adminLogin", loginData)
+        .post("http://127.0.0.1:7575/adminLogin", loginData)
         .then((response) => {
             seterrors("Login successful");
             seterrorStatus(false)

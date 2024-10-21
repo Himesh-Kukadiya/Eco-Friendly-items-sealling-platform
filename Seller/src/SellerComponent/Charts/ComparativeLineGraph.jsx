@@ -43,6 +43,10 @@ const ComparativeLineGraph = (props) => {
             legend: {
                 position: 'top',
             },
+            title: {
+                display: true,
+                text: "All Categories Sellings"
+            },
         },
         scales: {
             x: {

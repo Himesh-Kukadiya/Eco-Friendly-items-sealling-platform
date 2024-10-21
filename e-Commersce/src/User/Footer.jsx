@@ -10,20 +10,20 @@ export default function Footer() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mx-auto max-w-7xl text-center">
-            <div className=" mb-5 rounded-full w-72 h-72 ml-10" style={{backgroundColor:"#AEBE98"}}>
-                <h3 className="text-center p-8">Zero-plastic gifting</h3>
-                <p className="text-center">We provide thoughtfully curated, zero-plastic gift hampers across a range of themes and products. Celebrate your favourite people, your favourite events - all while causing no harm to our planet.</p>
-            </div>
-
-            <div className=" mb-5 rounded-full w-72 h-72 mx-auto ml-5" style={{backgroundColor:"#AEBE98"}}>
-                <h3 className="text-center p-8">Full disclosure</h3>
-                <p className="text-center">It’s what everyone wants, it’s what everyone needs. At Earth Haven, we let you in on the full product cycle, from manufacture to usage to disposal - for every individual product, and every gift hamper.</p>
-            </div>
-
-            <div className="mb-5 rounded-full w-72 h-72" style={{backgroundColor:"#AEBE98"}}>
-                <h3 className="text-center p-8">Measurable impact</h3>
-                <p className="text-center">How much of an impact does this small step actually make? For starters, a gift makes the receiver (and giver) smile! More importantly, at Earth Haven, you can keep a track of how much plastic you’re saving with every gift.</p>
-            </div>
+        <div className=" mb-5 rounded-full w-72 h-72 ml-10" style={{backgroundColor:"#AEBE98"}}>
+                  <h3 className="text-center p-8">Zero-plastic gifting</h3>
+                  <p className="text-center">We provide thoughtfully curated, zero-plastic gift hampers across a range of themes and products. Celebrate your favourite people, your favourite events - all while causing no harm to our planet.</p>
+              </div>
+  
+              <div className=" mb-5 rounded-full w-72 h-72 mx-auto ml-5" style={{backgroundColor:"#AEBE98"}}>
+                  <h3 className="text-center p-8">Full disclosure</h3>
+                  <p className="text-center">It’s what everyone wants, it’s what everyone needs. At Earth Haven, we let you in on the full product cycle, from manufacture to usage to disposal - for every individual product, and every gift hamper.</p>
+              </div>
+  
+              <div className="mb-5 rounded-full w-72 h-72" style={{backgroundColor:"#AEBE98"}}>
+                  <h3 className="text-center p-8">Measurable impact</h3>
+                  <p className="text-center">How much of an impact does this small step actually make? For starters, a gift makes the receiver (and giver) smile! More importantly, at Earth Haven, you can keep a track of how much plastic you’re saving with every gift.</p>
+              </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mx-auto max-w-7xl">
